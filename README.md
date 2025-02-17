@@ -15,8 +15,6 @@
 ## 📷 Screenshot  
 ![Text Steganography](text-steg.png)
 
-*(Make sure to place the `text-steg.png` file in the root directory of your repository.)*
-
 ## 🛠️ Technologies Used  
 - **HTML** – Structure of the webpage  
 - **CSS** – Styling and design  
