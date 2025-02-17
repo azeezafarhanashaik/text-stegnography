@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Steganography</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #121212;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .card {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 320px;
+    text-align: center;
+    margin: 10px;
+    position: relative; /* Added for shine effect */
+    overflow: hidden; /* Ensures shine effect stays within the card */
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 10px rgba(222, 174, 53, 0.3); /* Normal shadow on hover */
+    transform: translateY(0); /* No lift on hover */
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(226, 235, 101, 0.176), rgba(199, 183, 81, 0.255));
+    opacity: 1; /* Shine effect when not hovered */
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+    opacity: 0; /* No shine effect when hovered */
+}
+
+.card:active {
+    transform: translateY(2px); /* Slight push down when clicked */
+}
+
+        input, textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ff9800;
+            border-radius: 5px;
+            font-size: 16px;
+            background: #282828;
+            color: #fff;
+            outline: none;
+        }
+        .button {
+            width: 48%;
+            height: 40px;
+            background-color: #ff9800;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .button:hover {
+            background-color: #ffa726;
+        }
+        footer {
+            background-color: #1e1e1e;
+            color: #fff;
+            text-align: center;
+            padding: 5px;  /* Reduced padding */
+            width: 100%;
+            font-size: 12px;  /* Smaller font size */
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Text Steganography Tool</h1>
+    
+    <div class="container">
+        <div class="card" id="encodeCard">
+            <h2>Encode</h2>
+            <input type="password" id="encodeKey" placeholder="Enter a key">
+            <textarea id="inputText" placeholder="Enter message..."></textarea>
+            <button class="button" onclick="encode()">Encode</button>
+            <textarea id="outputText" readonly></textarea>
+            <button class="button" onclick="copyToClipboard('outputText')">Copy</button>
+            <button class="button" onclick="clearEncode()">Clear</button>
+        </div>
+
+        <div class="card" id="decodeCard">
+            <h2>Decode</h2>
+            <input type="password" id="decodeKey" placeholder="Enter a key">
+            <textarea id="encodedInput" placeholder="Enter encoded text..."></textarea>
+            <button class="button" onclick="decode()">Decode</button>
+            <textarea id="decodedOutput" readonly></textarea>
+            <button class="button" onclick="clearDecode()">Clear</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Azeeza. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function encode() {
+            let key = document.getElementById("encodeKey").value;
+            let text = document.getElementById("inputText").value;
+            if (!key || !text) {
+                alert("Both key and text are required!");
+                return;
+            }
+            let encrypted = CryptoJS.AES.encrypt(text, key).toString();
+            document.getElementById("outputText").value = encrypted;
+        }
+
+        function decode() {
+            let key = document.getElementById("decodeKey").value;
+            let encodedText = document.getElementById("encodedInput").value;
+            try {
+                let decrypted = CryptoJS.AES.decrypt(encodedText, key);
+                let decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+                if (!decryptedText) throw new Error();
+                document.getElementById("decodedOutput").value = decryptedText;
+            } catch (e) {
+                alert("Incorrect key or invalid text!");
+                document.getElementById("decodedOutput").value = "";
+            }
+        }
+
+        function copyToClipboard(elementId) {
+            let textArea = document.getElementById(elementId);
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textArea.value).then(() => {
+                    alert("Text copied to clipboard!");
+                }).catch(err => {
+                    alert("Error copying text: " + err);
+                });
+            } else {
+                textArea.select();
+                document.execCommand("copy");
+                alert("Text copied to clipboard!");
+            }
+        }
+
+        // Clear function for encoding
+        function clearEncode() {
+            document.getElementById("encodeKey").value = "";
+            document.getElementById("inputText").value = "";
+            document.getElementById("outputText").value = "";
+        }
+
+        // Clear function for decoding
+        function clearDecode() {
+            document.getElementById("decodeKey").value = "";
+            document.getElementById("encodedInput").value = "";
+            document.getElementById("decodedOutput").value = "";
+        }
+    </script>
+</body>
+</html>
