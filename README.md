@@ -27,5 +27,3 @@
 2. Enter the secret message and encode it.  
 3. Share the encoded text with the intended recipient.  
 4. Use the decoding feature to extract the hidden message.  
-
-## 📂 Project Structure  
