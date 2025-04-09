@@ -1,7 +1,7 @@
-# 📝 Text Steganography
+# 📝 StegoWrite
 
 ## 🔍 Overview  
-**Text Steganography** is a technique that hides secret messages within text, making them undetectable to unauthorized users. This project provides a simple web-based tool to encode and decode hidden messages securely.
+**StegoWrite** is a text stegnography tool. **Text Steganography** is a technique that hides secret messages within text, making them undetectable to unauthorized users. This project provides a simple web-based tool to encode and decode hidden messages securely.
 
 ## 🚀 Features  
 ✅ Hide secret messages inside text.  
